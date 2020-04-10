@@ -8,3 +8,7 @@ const functions = require('firebase-functions');
 // });
 
 exports.ssr = functions.https.onRequest((_req, res) => res.send('hello from function'));
+
+exports.test = functions.https.onRequest((_req, res) => {
+    res.redirect("https://bodyweight-blitz.web.app/");
+});

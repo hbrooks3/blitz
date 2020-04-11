@@ -8,9 +8,10 @@
 
 	onMount(() => {
 		cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+		load_workout();
 	})
 
-	let lastExercise = (exercise) => exercise + 1 == workouts.length;
+	let lastExercise = exercise => exercise + 1 == workout.length;
 	
 	let start = () => {
 		last = window.performance.now();
@@ -26,7 +27,7 @@
 	let finish = () => {
 		stop();
 		total_time = Math.floor(total_time);
-		workouts[exercise].time = Math.floor(workouts[exercise].time);
+		workout[exercise].time = Math.floor(workout[exercise].time);
 		finished = true;
 		alert("Workout complete! Good work.");
 	}
@@ -36,10 +37,10 @@
 		if (lastExercise(exercise)) {
 			finish()
 		} else {
-			let extra =  workouts[exercise].time - Math.floor(workouts[exercise].time);
-			workouts[exercise].time -= extra;
+			let extra =  workout[exercise].time - Math.floor(workout[exercise].time);
+			workout[exercise].time -= extra;
 			exercise++;
-			workouts[exercise].time = extra;
+			workout[exercise].time = extra;
 		}
 	}
 	
@@ -50,7 +51,7 @@
 		last = window.performance.now();
 		total_time = 0;
 		change = 0;
-		workouts.forEach(workout => workout.time = 0)
+		workout.forEach(workout => workout.time = 0)
 		exercise = 0
 	}
 	
@@ -73,56 +74,15 @@
 	
 	onDestroy(stop);
 	
-	$: workouts[exercise].time += change / 1000;
+	$: if (workout) workout[exercise].time += change / 1000;
 	$: total_time += change / 1000;
+
+	let workout 
 	
-	let workouts = [
-		{
-			name: "push-ups",
-			time: 0,
-			reps: [],
-			goal: {
-				rep: {
-					best: 0,
-					last: 0,
-				},
-				time: {
-					best: 0,
-					last: 0,
-				},
-			},
-		},
-		{
-			name: "squats",
-			time: 0,
-			reps: [],
-			goal: {
-				rep: {
-					best: 0,
-					last: 0,
-				},
-				time: {
-					best: 0,
-					last: 0,
-				},
-			},
-		},
-		{
-			name: "sit-ups",
-			time: 0,
-			reps: [],
-			goal: {
-				rep: {
-					best: 0,
-					last: 0,
-				},
-				time: {
-					best: 0,
-					last: 0,
-				},
-			},
-		},
-	]
+	async function load_workout() {
+		workout = await fetch("/new").
+			then(r => r.json()).then(r => r.workout);
+	}
 	
 	let best_time = 0;
 	let last_time = 0;
@@ -160,6 +120,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </svelte:head>
 
+
+
 <div class=bar>
 	{#if !finished && !running}
 		<button on:click={start}>
@@ -183,6 +145,11 @@
 </div>
 
 <MainTimer current={total_time} best={best_time} last={last_time}/>
-<Workout workout={workouts[0]}/>
-<Workout workout={workouts[1]}/>
-<Workout workout={workouts[2]}/>
+
+{#if workout}
+
+<Workout workout={workout[0]}/>
+<Workout workout={workout[1]}/>
+<Workout workout={workout[2]}/>
+
+{/if}

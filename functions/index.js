@@ -62,6 +62,5 @@ let blank_workout = [
 ]
 
 exports.new = functions.https.onRequest((_req, res) => {
-    res.json({workout: blank_workout})
-    // res.send()
+    res.json({workout: blank_workout}).send()
 })

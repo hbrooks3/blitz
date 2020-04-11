@@ -44,7 +44,7 @@
     EVERY WORKOUT, TRY TO DO MORE REPS ON YOUR FIRST SET, OR BEAT YOUR TIME.
 </p>
 
-<a href="/workout">
+<a href="/workout/">
     <button>START</button>
 </a>
 

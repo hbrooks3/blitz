@@ -1,21 +1,20 @@
 <style>
+    * {
+        font-family: Roboto;
+        text-align: center;
+    }
+
     h1 {
         font-size: 48px;
-		font-family: Roboto;
-        text-align: center;
         margin-top: 30px;
     }
 
     h2 {
         font-size: 24px;
-		font-family: Roboto;
-        text-align: center;
     }
 
     p {
         font-size: 18px;
-		font-family: Roboto;
-        text-align: center;
         padding: 0px 20px;
     }
 
@@ -26,14 +25,12 @@
         font-size: 32px;
         width: 240px;
         height: 62px;
-        margin-bottom: 15px;
+        margin: 0 auto 15px;
+        display: block;
     }
 
-    div.buttons {
-        display: flex;
-		flex-direction: column;
-  		align-items: center;
-		justify-content: center;
+    a {
+        text-decoration: none;
     }
 </style>
 
@@ -51,17 +48,15 @@
     EVERY WORKOUT, TRY TO DO MORE REPS ON YOUR FIRST SET, OR BEAT YOUR TIME.
 </p>
 
-<div class=buttons>
-    <a href="/workout/">
-        <button>START</button>
-    </a>
+<a href="/workout/">
+    <button>START</button>
+</a>
 
-    <button on:click={()=>alert("This feature is coming soon!")}>
-        HISTORY
-    </button>
+<button on:click={()=>alert("This feature is coming soon!")}>
+    HISTORY
+</button>
 
-    <button on:click={()=>alert("This feature is coming soon!")}>
-        LOGIN
-    </button>
-</div>
+<button on:click={()=>alert("This feature is coming soon!")}>
+    LOGIN
+</button>
 

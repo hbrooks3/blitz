@@ -1,5 +1,5 @@
 <style>
-	main {
+	:global(body) {
 		background-color: black;
 		color: white;
 		font-family: Roboto;
@@ -11,6 +11,4 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 </svelte:head>
 
-<main>
-	<slot></slot>
-</main>
+<slot></slot>

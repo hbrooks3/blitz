@@ -18,19 +18,14 @@
         padding: 0px 20px;
     }
 
-    button {
+    a.button {
+        text-decoration: none;
         background-color: black;
-        color: white;
         border: 5px solid white;
         font-size: 32px;
         width: 240px;
-        height: 62px;
-        margin: 0 auto 15px;
+        margin: 15px auto;
         display: block;
-    }
-
-    a {
-        text-decoration: none;
     }
 </style>
 
@@ -48,15 +43,18 @@
     EVERY WORKOUT, TRY TO DO MORE REPS ON YOUR FIRST SET, OR BEAT YOUR TIME.
 </p>
 
-<a href="/workout/">
-    <button>START</button>
+<script>
+    let not_ready = () => alert("This feature is coming soon!");
+</script>
+
+<a href="/workout/" class=button>
+    START
 </a>
 
-<button on:click={()=>alert("This feature is coming soon!")}>
+<a href="/" class=button on:click={not_ready}>
     HISTORY
-</button>
+</a>
 
-<button on:click={()=>alert("This feature is coming soon!")}>
+<a href="/" class=button on:click={not_ready}>
     LOGIN
-</button>
-
+</a>

@@ -4,9 +4,6 @@
 		color: white;
 		font-family: Roboto;
 		text-transform: uppercase;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 	}
 </style>
 

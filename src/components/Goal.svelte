@@ -11,7 +11,9 @@
 		font-size: 18px;
 		line-height: 1.8;
 		text-align: center;
-		margin: 10px;
+		width: 100px;
+		height: 70px;
+		margin: auto;
 	}
 </style>
 

@@ -11,16 +11,19 @@
 	header {
 		display: flex;
 		flex-direction: row;
-  	align-items: center;
+		flex-wrap: wrap;
+  		align-items: center;
+		justify-content: center;
+		padding: 20px;
 	}
 	
 	.timer {
 		font-size: 96px;
+		line-height: 1em;
 	}
 	
 	.goal {
-		left: 20px;
-		position: relative;
+		margin-left: 10px;
 	}
 </style>
 

@@ -21,6 +21,7 @@
 
 <style>
 	section {
+		padding: 0 20px;
 		text-align: center;
 	}
 	

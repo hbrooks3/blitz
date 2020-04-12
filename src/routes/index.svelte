@@ -28,6 +28,13 @@
         height: 62px;
         margin-bottom: 15px;
     }
+
+    div.buttons {
+        display: flex;
+		flex-direction: column;
+  		align-items: center;
+		justify-content: center;
+    }
 </style>
 
 <h1>BODYWEIGHT BLITZ</h1>
@@ -44,14 +51,17 @@
     EVERY WORKOUT, TRY TO DO MORE REPS ON YOUR FIRST SET, OR BEAT YOUR TIME.
 </p>
 
-<a href="/workout/">
-    <button>START</button>
-</a>
+<div class=buttons>
+    <a href="/workout/">
+        <button>START</button>
+    </a>
 
-<a href="/" on:click={()=>alert("This feature is coming soon!")}>
-    <button>HISTORY</button>
-</a>
+    <button on:click={()=>alert("This feature is coming soon!")}>
+        HISTORY
+    </button>
 
-<a href="/" on:click={()=>alert("This feature is coming soon!")}>
-    <button>LOGIN</button>
-</a>
+    <button on:click={()=>alert("This feature is coming soon!")}>
+        LOGIN
+    </button>
+</div>
+

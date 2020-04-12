@@ -1,6 +1,9 @@
 <script>
 	import MainTimer from '../components/MainTimer.svelte';
 	import Workout from '../components/Workout.svelte';
+
+	// For dev mode
+	// import blank_workout from './_workout.js';
 	
 	import { onDestroy, onMount } from 'svelte';
 
@@ -77,7 +80,10 @@
 	$: if (workout) workout[exercise].time += change / 1000;
 	$: total_time += change / 1000;
 
-	let workout 
+	// For dev mode
+	// let workout = blank_workout;
+
+	let workout;
 	
 	async function load_workout() {
 		workout = await fetch("/new").
@@ -89,29 +95,36 @@
 </script>
 
 <style>
-	:global(body) {
-		padding-bottom: 100px;
-	}
-
 	.bar {
 		display: flex;
 		flex-direction: row;
   		align-items: center;
+		justify-content: center;
 		background-color: black;
 		position: fixed;
   		bottom: 0;
-		padding: 0 100%;
+		width: 100%;
+		height: 100px;
+	}
+
+	main {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+  		align-items: center;
+		justify-content: center;
+		padding-bottom: 100px;
 	}
 	
 	button {
 		background-color: black;
         color: white;
         border: 5px solid white;
-		font-size: 32px;
+		font-size: 24px;
         height: 60px;
 		font-family: Roboto;
 		text-transform: uppercase;
-		margin: 0px 10px 30px;
+		margin: 10px;
 	}
 
 	h1 {
@@ -128,13 +141,18 @@
 
 <MainTimer current={total_time} best={best_time} last={last_time}/>
 
-<Workout workout={workout[0]}/>
-<Workout workout={workout[1]}/>
-<Workout workout={workout[2]}/>
+<main>
+	<Workout workout={workout[0]}/>
+	<Workout workout={workout[1]}/>
+	<Workout workout={workout[2]}/>
+</main>
+
 
 {:else}
 
-<h1>LOADING...</h1>
+<main>
+	<h1>LOADING...</h1>
+</main>
 
 {/if}
 

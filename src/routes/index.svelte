@@ -19,6 +19,7 @@
     }
 
     a.button {
+        box-sizing: border-box;
         text-decoration: none;
         background-color: black;
         border: 5px solid white;
@@ -27,7 +28,42 @@
         margin: 15px auto;
         display: block;
     }
+
+    p.displayName {
+        font-size: 12px;
+        max-width: 240px;
+        margin: 0 auto;
+    }
 </style>
+
+<script>
+    import { onMount } from 'svelte';
+    let auth, provider, login, logout, user;
+
+    onMount(() => {
+        auth = firebase.auth();
+        provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('profile');
+        provider.addScope('email');
+        login = () => {
+            console.log("Login clicked")
+            auth.signInWithRedirect(provider)
+        };
+        logout = () => auth.signOut();
+
+        auth.onAuthStateChanged(_user => {
+            if (_user) {
+                user = _user
+                console.log(`${user.displayName} is logged in`)
+            } else {
+                user = null
+                console.log("Nobody logged in")
+            }
+        });
+    });
+
+    let not_ready = () => alert("This feature is coming soon!");
+</script>
 
 <h1>BODYWEIGHT BLITZ</h1>
 
@@ -43,10 +79,6 @@
     EVERY WORKOUT, TRY TO DO MORE REPS ON YOUR FIRST SET, OR BEAT YOUR TIME.
 </p>
 
-<script>
-    let not_ready = () => alert("This feature is coming soon!");
-</script>
-
 <a href="/workout/" class=button>
     START
 </a>
@@ -55,6 +87,18 @@
     HISTORY
 </a>
 
-<a href="/" class=button on:click={not_ready}>
+{#if user}
+
+<a href="/" class=button on:click={logout}>
+    LOGOUT
+</a>
+
+<p class=displayName>LOGGED IN AS {user.displayName}</p>
+
+{:else}
+
+<a href="/" class=button on:click={login}>
     LOGIN
 </a>
+
+{/if}

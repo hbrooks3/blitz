@@ -38,28 +38,16 @@
 
 <script>
     import { onMount } from 'svelte';
-    let auth, provider, login, logout, user;
+    import { getCurrentUser, getLogin, getLogout } from './_fire.js'
+    let login, logout, user;
 
     onMount(() => {
-        auth = firebase.auth();
-        provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('profile');
-        provider.addScope('email');
-        login = () => {
-            console.log("Login clicked")
-            auth.signInWithRedirect(provider)
-        };
-        logout = () => auth.signOut();
-
-        auth.onAuthStateChanged(_user => {
-            if (_user) {
-                user = _user
-                console.log(`${user.displayName} is logged in`)
-            } else {
-                user = null
-                console.log("Nobody logged in")
-            }
-        });
+        user = getCurrentUser(firebase);
+        login = getLogin(firebase);
+        logout = () => {
+            getLogout(firebase)();
+            user = getCurrentUser(firebase);
+        }
     });
 
     let not_ready = () => alert("This feature is coming soon!");
@@ -87,18 +75,33 @@
     HISTORY
 </a>
 
-{#if user}
+{#await user}
 
 <a href="/" class=button on:click={logout}>
-    LOGOUT
+    LOADING
 </a>
 
-<p class=displayName>LOGGED IN AS {user.displayName}</p>
+{:then user}
 
-{:else}
+    {#if user}
 
-<a href="/" class=button on:click={login}>
-    LOGIN
-</a>
+    <a href="/" class=button on:click={logout}>
+        LOGOUT
+    </a>
 
-{/if}
+    <p class=displayName>LOGGED IN AS {user.displayName}</p>
+
+    {:else}
+
+    <a href="/" class=button on:click={login}>
+        LOGIN
+    </a>
+
+    {/if}
+
+{:catch error}
+
+<p>Something went wrong: {error.message}</p>
+
+{/await}
+

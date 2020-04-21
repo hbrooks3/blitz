@@ -1,4 +1,4 @@
-export const getCurrentUser = (firebase) => {
+export const getCurrentUser = firebase => {
     return new Promise((resolve, reject) => {
         const unsubscribe = getAuth(firebase).onAuthStateChanged(user => {
             unsubscribe();
@@ -8,9 +8,10 @@ export const getCurrentUser = (firebase) => {
 }
 
 let provider;
-const getProvider = (firebase) => {
+const getProvider = firebase => {
     if (provider) return provider;
 
+    console.log("Loading provider");
     provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('profile');
     provider.addScope('email');
@@ -19,8 +20,9 @@ const getProvider = (firebase) => {
 }
 
 let auth;
-const getAuth = (firebase) => {
+const getAuth = firebase => {
     if (auth) return auth;
+    console.log("Loading auth");
 
     auth = firebase.auth();
 

@@ -77,7 +77,7 @@
 
 {#await user}
 
-<a href="/" class=button on:click={logout}>
+<a href="/" class=button>
     LOADING
 </a>
 

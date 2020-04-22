@@ -1,97 +1,82 @@
 <script>
 	import MainTimer from '../components/MainTimer.svelte';
-	import Workout from '../components/Workout.svelte';
+	import Exercise from '../components/Exercise.svelte';
 
-	// For dev mode
-	// import blank_workout from './_workout.js';
-	
 	import { onDestroy, onMount } from 'svelte';
 
-	let cancelAnimationFrame = () => {}
-
-	onMount(() => {
-		cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-		load_workout();
-	})
-
-	let lastExercise = exercise => exercise + 1 == workout.length;
-	
-	let start = () => {
-		last = window.performance.now();
-		running = true;
-		update();
-	}
-	
-	let stop = () => {
-		running = false;
-		cancelAnimationFrame(frame);
-	}
-
-	let finish = () => {
-		stop();
-		total_time = Math.floor(total_time);
-		workout[exercise].time = Math.floor(workout[exercise].time);
-		finished = true;
-		alert("Workout complete! Good work.");
-	}
-	
-	let next = () => {
-		if (!running) return;
-		if (lastExercise(exercise)) {
-			finish()
-		} else {
-			let extra =  workout[exercise].time - Math.floor(workout[exercise].time);
-			workout[exercise].time -= extra;
-			exercise++;
-			workout[exercise].time = extra;
-		}
-	}
-	
-	let reset = () => {
-		if (!confirm("Reseting will erase the workout in progress.")) return;
-		running = false;
-		finished = false;
-		last = window.performance.now();
-		total_time = 0;
-		change = 0;
-		workout.forEach(workout => workout.time = 0)
-		exercise = 0
-	}
-	
-	let exercise = 0
-	let last;
-	let frame;
-	let total_time = 0;
-	let change = 0;
-	let running = false;
-	let finished = false;
-
-	function update() {
-		if (running) {
-			frame = requestAnimationFrame(update);
-			const time = window.performance.now();
-			change = time - last;
-			last = time;
-		}
-	};
-	
-	onDestroy(stop);
-	
-	$: if (workout) workout[exercise].time += change / 1000;
-	$: total_time += change / 1000;
-
-	// For dev mode
-	// let workout = blank_workout;
+	// // For dev mode
+	// import blank_workout from './_workout.js';
 
 	let workout;
-	
-	async function load_workout() {
-		workout = await fetch("/new").
-			then(r => r.json()).then(r => r.workout);
+
+	onMount(async () => {
+		workout = await fetch("/new").then(r => r.json());
+
+		// // For dev mode
+		// workout = await new Promise((resolve, reject) => {
+		// 	setTimeout(resolve(blank_workout), 1000);
+		// });
+	});
+
+	const getTime = () => (new Date()).setMilliseconds(0)	
+
+	let timer;
+	let now;
+
+	const update = () => {
+		now = getTime();
+		timer = requestAnimationFrame(update);
 	}
-	
-	let best_time = 0;
-	let last_time = 0;
+
+	let running = false;
+	let started = false;
+	let finished = false;
+	let currentExercise = 0;
+
+	const start = () => {
+		if (!started) {
+			let now = getTime()
+			workout.start = now;
+			workout.exercises[currentExercise].start = now;
+		}
+		running = true;
+		started = true;
+		update();
+	}
+
+	const stop = () => {
+		running = false;
+		cancelAnimationFrame(timer);
+	}
+
+	const next = () => {
+		workout.exercises[currentExercise].end = now;
+		currentExercise++;
+
+		if (currentExercise == workout.exercises.length) {
+			stop()
+			finished = true;
+			workout.end = getTime();
+			alert("Workout complete! Good work.");
+		} else {
+			workout.exercises[currentExercise].start = now;
+		}
+	}
+
+	const reset = () => {
+		if (!confirm("Reseting will erase the workout in progress.")) return;
+		started = false;
+		finished = false;
+		currentExercise = 0;
+		stop();
+		delete workout.start;
+		delete workout.end;
+		workout.exercises.forEach(exercise => {
+			delete exercise.start;
+			delete exercise.end;
+		});
+		now = getTime();
+	}
 </script>
 
 <style>
@@ -138,42 +123,38 @@
 </svelte:head>
 
 {#if workout}
+	<MainTimer {workout} {now}/>
 
-<MainTimer current={total_time} best={best_time} last={last_time}/>
-
-<main>
-	<Workout workout={workout[0]}/>
-	<Workout workout={workout[1]}/>
-	<Workout workout={workout[2]}/>
-</main>
+	<main>
+		{#each workout.exercises as exercise}
+			<Exercise {exercise} {now}/>
+		{/each}
+	</main>
 
 
+	<div class=bar>
+		{#if !finished && !running}
+			<button on:click={start}>
+				{started ? "Continue" : "Start"}
+			</button>
+		{:else if !finished && running}
+			<button on:click={stop}>
+				Stop
+			</button>
+
+			<button on:click={next}>
+				{currentExercise + 1 == workout.exercises.length ? "Finish" : "Next"}
+			</button>
+		{/if}
+
+		{#if started && !running}
+			<button on:click={reset}>
+				Reset
+			</button>
+		{/if}
+	</div>
 {:else}
-
-<main>
-	<h1>LOADING...</h1>
-</main>
-
+	<main>
+		<h1>LOADING...</h1>
+	</main>
 {/if}
-
-<div class=bar>
-	{#if !finished && !running && workout}
-		<button on:click={start}>
-			{total_time ? "Continue" : "Start"}
-		</button>
-	{:else if !finished && running}
-		<button on:click={stop}>
-			Stop
-		</button>
-
-		<button on:click={next}>
-			{lastExercise(exercise) ? "Finish" : "Next"}
-		</button>
-	{/if}
-
-	{#if total_time && !running}
-		<button on:click={reset}>
-			Reset
-		</button>
-	{/if}
-</div>

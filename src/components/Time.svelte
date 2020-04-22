@@ -1,8 +1,9 @@
 <script>
 	export let value;
-	
-	$: seconds = Math.floor(value % 60);
-	$: minutes = Math.floor(value / 60);
+
+	$: time = new Date(value);
+	$: seconds = time.getSeconds();
+	$: minutes = time.getMinutes();
 	$: if (seconds < 10) {
 		seconds = "0" + seconds
 	}

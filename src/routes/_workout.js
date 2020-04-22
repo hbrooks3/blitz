@@ -1,49 +1,55 @@
-let blank_workout = [
-    {
-        name: "push-ups",
-        time: 0,
-        reps: [],
-        goal: {
-            rep: {
-                best: 0,
-                last: 0,
-            },
-            time: {
-                best: 0,
-                last: 0,
-            },
+const blank_workout = {
+    status: "Created",
+    goal: {
+        time: {
+            best: 300,
+            last: 300,
         },
     },
-    {
-        name: "squats",
-        time: 0,
-        reps: [],
-        goal: {
-            rep: {
-                best: 0,
-                last: 0,
-            },
-            time: {
-                best: 0,
-                last: 0,
-            },
-        },
-    },
-    {
-        name: "sit-ups",
-        time: 0,
-        reps: [],
-        goal: {
-            rep: {
-                best: 0,
-                last: 0,
-            },
-            time: {
-                best: 0,
-                last: 0,
+    exercises: [
+		{
+			name: "push-ups",
+            sets: [],
+            goal: {
+                rep: {
+                    best: 54,
+                    last: 54,
+                },
+                time: {
+                    best: 300,
+                    last: 300,
+                },
             },
         },
-    },
-]
+        {
+			name: "squats",
+            sets: [],
+            goal: {
+                rep: {
+                    best: 100,
+                    last: 100,
+                },
+                time: {
+                    best: 300,
+                    last: 300,
+                },
+            },
+        },
+        {
+			name: "sit-ups",
+            sets: [],
+            goal: {
+                rep: {
+                    best: 100,
+                    last: 100,
+                },
+                time: {
+                    best: 300,
+                    last: 300,
+                },
+            },
+		},
+	]
+}
 
 export default blank_workout;

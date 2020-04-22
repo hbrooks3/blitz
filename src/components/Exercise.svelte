@@ -2,21 +2,11 @@
 	import Time from './Time.svelte';
 	import Goal from './Goal.svelte';
 	
-	export let workout = {
-		name: "workout",
-		time: 0,
-		reps: [],
-		goal: {
-			rep: {
-				best: 0,
-				last: 0,
-			},
-			time: {
-				best: 0,
-				last: 0,
-			},
-		}
-	}
+	export let exercise;
+	export let now;
+
+	$: time = exercise.end ?
+		(exercise.end - exercise.start) : (exercise.start ? now - exercise.start : 0)
 </script>
 
 <style>
@@ -48,16 +38,16 @@
 </style>
 
 <section>
-	<h1>{workout.name} - <Time value={workout.time}/></h1>
+	<h1>{exercise.name} - <Time value={time}/></h1>
 	
 	<div class=goals>
 		<div class=goal>
 			<h2>First Rep</h2>
-			<Goal best={workout.goal.rep.best} last={workout.goal.rep.last} rep=true/>
+			<Goal best={exercise.goal.rep.best} last={exercise.goal.rep.last} rep=true/>
 		</div>
 		<div class=goal>
 			<h2>Time</h2>
-			<Goal best={workout.goal.time.best} last={workout.goal.time.last}/>
+			<Goal best={exercise.goal.time.best} last={exercise.goal.time.last}/>
 		</div>
 	</div>
 </section>

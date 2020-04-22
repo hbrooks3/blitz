@@ -1,10 +1,12 @@
 <script>
 	import Time from './Time.svelte';
 	import Goal from './Goal.svelte';
-	
-	export let current = 0;
-	export let best = 0;
-	export let last = 0;
+
+	export let workout;
+	export let now;
+
+	$: time = workout.end ?
+		(workout.end - workout.start) : (workout.start ? now - workout.start : 0);
 </script>
 
 <style>
@@ -29,10 +31,10 @@
 
 <header>
 	<div class=timer>
-		<Time value={current}/>
+		<Time value={time}/>
 	</div>
 	
 	<div class=goal>
-		<Goal best={best} last={last}/>
+		<Goal best={workout.goal.time.best} last={workout.goal.time.last}/>
 	</div>
 </header>
